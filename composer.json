@@ -1,0 +1,23 @@
+{
+    "name": "jinjie/stripe-product-checkout",
+    "description": "A very simple stripe checkout for SilverStripe",
+    "type": "silverstripe-vendormodule",
+    "keywords": [
+        "SilverStripe",
+        "Stripe",
+        "Checkout"
+    ],
+    "authors": [
+        {
+            "name": "Kong Jin Jie",
+            "email": "jinjie@swiftdev.sg"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "^4",
+        "silverstripe/cms": "^4",
+        "bummzack/sortablefile": "^2.0",
+        "silverstripe/lumberjack": "^2.0",
+        "stripe/stripe-php": "^7.27"
+    }
+}

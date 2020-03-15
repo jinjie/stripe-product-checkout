@@ -16,6 +16,7 @@ use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\View\ArrayData;
 use StripeProductCheckout\Models\Product;
 use Stripe\Stripe;
 
@@ -23,6 +24,8 @@ class ProductController extends \PageController
 {
     private static $allowed_actions = [
         'CheckoutForm',
+        'success',
+        'cancel',
     ];
 
     public function CheckoutForm()
@@ -73,8 +76,8 @@ class ProductController extends \PageController
         $session = \Stripe\Checkout\Session::create([
             'payment_method_types'        => ['card'],
             'line_items'                  => $items,
-            'success_url'                 => $this->AbsoluteLink(),
-            'cancel_url'                  => $this->AbsoluteLink(),
+            'success_url'                 => $this->AbsoluteLink('success'),
+            'cancel_url'                  => $this->AbsoluteLink('cancel'),
             'shipping_address_collection' => [
                 'allowed_countries' => [
                     'SG',
@@ -88,6 +91,34 @@ class ProductController extends \PageController
                 'StripePK'        => Environment::getEnv('STRIPE_PK'),
                 'StripeSessionID' => $session->id
             ])->renderWith('StripeCheckout'),
+        ]);
+    }
+
+    public function success()
+    {
+        $data = ArrayData::create([
+            'StripeMessage' => [
+                'Type'    => 'success',
+                'Message' => _t(self::class . '.SUCCESSMESSAGE', 'We have received your order. You will be notified by email regarding your order.'),
+            ]
+        ]);
+
+        return $this->customise([
+            'StripeMessage' => $data->renderWith('StripeMessage')
+        ]);
+    }
+
+    public function cancel()
+    {
+        $data = ArrayData::create([
+            'StripeMessage' => [
+                'Type'    => 'danger',
+                'Message' => _t('STRIPEPRODUCTCHECKOUT.SUCCESSMESSAGE', 'Your order is cancelled. Please try again.'),
+            ]
+        ]);
+
+        return $this->customise([
+            'StripeMessage' => $data->renderWith('StripeMessage')
         ]);
     }
 }

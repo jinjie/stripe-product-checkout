@@ -1,4 +1,5 @@
 <div class="container">
+    {$StripeMessage}
     <div class="row">
         <div class="col-12 col-md-6">
             {$Images.Sort(SortOrder).First}
